@@ -1,193 +1,70 @@
-# cc-caffeine ☕⚡
+# cc-amphetamine
 
-**Transform your 9-to-5 into 9:30-to-4:30.** Arrive 30min later, leave 30min earlier, while getting the same work done because **Claude Code stays powered in your backpack while commuting.**
+Shows a **clawd** (Claude mascot) icon in your macOS menu bar while Claude Code sessions are active. Pairs with [Amphetamine](https://apps.apple.com/app/amphetamine/id937984704) to prevent your Mac from sleeping.
 
-Work smarter, not longer.
+Hard fork of [cc-caffeine](https://github.com/samber/cc-caffeine) by Samuel Berthe.
 
-## 🌍 The Modern Developer's Freedom
+## How it works
 
-Tired of your laptop going to sleep during that perfect coding session because you left your desk 10 minutes? Frustrated when Claude Code disconnects mid-commute because your computer decided it was "idle"?
+1. Claude Code hooks call `cc-amphetamine caffeinate` when a session is active
+2. An Electron process starts showing the **clawd icon** in the menu bar
+3. [Amphetamine](https://apps.apple.com/app/amphetamine/id937984704) detects the running app and keeps your Mac awake
+4. When all sessions expire, the process exits and the icon disappears
+5. Amphetamine detects the app is gone and allows sleep again
 
-**cc-caffeine is your personal rebellion against screen timeout.** It keeps your machine awake so you can:
+The clawd icon auto-adapts to light/dark mode:
 
-- 🚇 Code on the RER between Paris and suburbs
-- ☕ Sip a latte at Starbucks during 3-hour debugging sessions
-- 🚴‍♂️ Pedal to the coworking space while maintaining your active connection
-- 📱 Respond to your girlfriend calls during work hours, without Claude Code interruptions
+![](./assets/clawd.png) - Claude Code is active
 
-<img width="4032" height="1152" alt="image" src="https://github.com/user-attachments/assets/e1db7f4c-bd49-4ec5-8da4-2595c7f9b80a" />
-
-## 🎯 Installation
+## Installation
 
 ```bash
-/plugin marketplace add samber/cc
-/plugin install cc-caffeine@samber
+/install rogeriochaves/cc-amphetamine
 ```
 
-*cc-caffine status*:
+## Amphetamine Setup
 
-![](./assets/icon-coffee-empty.png) - Claude Code is idle
+1. Install [Amphetamine](https://apps.apple.com/app/amphetamine/id937984704) from the Mac App Store
+2. Open Amphetamine > Preferences > Triggers
+3. Add a new trigger > **Application**
+4. Select the Electron app (find it at `node_modules/electron/dist/Electron.app` inside the plugin directory)
+5. Done! Amphetamine will keep your Mac awake whenever the clawd icon is visible
 
-![](./assets/icon-coffee-full.png) - Claude Code is working hard
+## Configuration
 
-## 🌟 The Nomad Developer Manifesto
-
-> "I'll never choose between coding and traveling again. With cc-caffeine, I can do both. My laptop will never sleep while I traverse cities in 5G, my Claude Code will stay connected in my backpack, and my productivity will soar. The future of mobile development is here, and it smells like coffee."
-
-## ✨ Why It's Pure Magic
-
-**Automatic Intelligence**: cc-caffeine knows when Claude Code is working and prevents your computer from sleeping. Period.
-
-**System Tray Chic**: A tiny ☕️ icon in your status bar to know instantly if you're protected.
-
-**Perfect Sessions**: Multiple simultaneous Claude Code sessions? No problem.
-
-**Zero Configuration**: Install, run, forget. It's like coffee, but for your computer.
-
-## 🎯 Use Cases That Will Change Your Life
-
-### ☕ **The Coffee Shop Marathon**
-- 3 hours of focus without ever losing your connection
-- No more waking your screen every 5 minutes
-- Baristas will recognize you as "the developer who never sleeps"
-- Your productivity increases proportionally to your caffeine consumption
-
-### 🏠 **Flexible Remote Work**
-- Transform your balcony into an outdoor office
-- Code from the terrace in fresh air
-- No more choosing between "work" and "enjoy the sunshine"
-- Your boss will think you're working 24/7 (that's an advantage, right?)
-
-## 🛠️ Technical Features (With Style)
-
-- **🎯 Session-Based Management**: Intelligently manages multiple simultaneous Claude Code sessions
-- **🔄 Auto-Cleanup**: Forget to disable - sessions automatically expire after 15 minutes without tool call or user input
-- **🚀 Headless**: Just an elegant discreet system tray icon
-- **⚡ Native Sleep Prevention**: Electron's power management - cross-platform sleep prevention
-- **🍎 Cross-Platform**: Works on macOS, Linux, and Windows (yes, even Windows!)
-
-## 🎭 Claude Code Integration
-
-Hooks will be configured automatically if you import the project as a Claude Code plugin.
-
-Otherwise, configure your Claude Code hooks for a seamless experience:
+Optional config at `~/.claude/plugins/cc-amphetamine/config.json`:
 
 ```json
 {
-  "UserPromptSubmit": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "npx cc-caffeine caffeinate"
-        }
-      ]
-    }
-  ],
-  "PreToolUse": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "npx cc-caffeine caffeinate"
-        }
-      ]
-    }
-  ],
-  "PostToolUse": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "npx cc-caffeine caffeinate"
-        }
-      ]
-    }
-  ],
-  "Notification": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "npx cc-caffeine uncaffeinate"
-        }
-      ]
-    }
-  ],
-  "Stop": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "npx cc-caffeine uncaffeinate"
-        }
-      ]
-    }
-  ],
-  "SessionEnd": [
-    {
-      "hooks": [
-        {
-          "type": "command",
-          "command": "npx cc-caffeine uncaffeinate"
-        }
-      ]
-    }
-  ]
+  "session_timeout_minutes": 5
 }
 ```
 
-## 💡 The Secret Sauce
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `session_timeout_minutes` | `15` | Minutes of inactivity before a session expires |
 
-cc-caffeine uses an intelligent client-server approach:
-
-1. **Lightweight Client** (`caffeinate`/`uncaffeinate`) - No Electron loading, just fast JSON writes
-2. **System Server** (`server`) - Headless Electron app that monitors sessions and manages power
-3. **Communication** - JSON file with atomic locking for perfect coordination
-
-## 📋 Requirements
-
-- Node.js >= 14.0.0 (your coffee of choice)
-- Electron (included automatically, like sugar in your espresso)
-- A burning desire to code everywhere, all the time
-
-## 🚀 Run without Claude Code
+## Commands
 
 ```bash
-# Start server + system tray
-# (optional - will be started automatically)
-npx cc-caffeine server
+# Check status
+cc-amphetamine status
 
-claude -p 'Write 10 pages of "lorem ipsum"'
+# Manual usage (normally handled by hooks automatically)
+echo '{"session_id": "test"}' | cc-amphetamine caffeinate
+echo '{"session_id": "test"}' | cc-amphetamine uncaffeinate
 
-npx cc-caffeine status
+# Start server manually (normally auto-started)
+cc-amphetamine server
 ```
 
-Manual switch:
+## How it differs from cc-caffeine
 
-```bash
-# Activate caffeine for your coding session
-echo '{"session_id": "session-abcd"}' | npx cc-caffeine caffeinate
+- **No built-in sleep prevention** — delegates to Amphetamine which handles lid-close properly
+- **macOS only** — Amphetamine is a macOS app
+- **Clawd icon** instead of coffee cup
+- **Process exits when idle** — no sessions means the app dies, Amphetamine stops preventing sleep
 
-# Your session is now protected!
-# Claude can keep working while you sip coffee
+## License
 
-# When you're done (or after 15 minutes of auto-cleanup)
-echo '{"session_id": "session-abcd"}' | npx cc-caffeine uncaffeinate
-```
-
-## 💫 Fuel the Revolution
-
-- ⭐️ **Star this repo** - Your star powers the caffeine engine!
-- ☕️ **Buy me a coffee** - I'll literally use it to build more features while drinking actual coffee
-- 🚀 **Sponsor the revolution** - Help me defeat screen timeouts worldwide!
-
-[![💖 GitHub Sponsors](https://img.shields.io/github/sponsors/samber?style=for-the-badge)](https://github.com/sponsors/samber)
-
-*Every sponsor gets a virtual high-five and the knowledge that somewhere, a developer is "coding" from a ski track because of you.* ✨
-
-**PS**: If you encounter bugs, remember that even the best coffee has some grounds sometimes. But most of the time, it works like thunder. ⚡☕
-
-## 📄 License
-
-MIT - Use it, modify it, share it. Like good coffee, it's meant to be shared.
+MIT

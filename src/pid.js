@@ -2,11 +2,6 @@
 
 /**
  * PID management module - Handles atomic PID file operations and validation
- *
- * This module provides functions to:
- * - Atomically read/write PID files
- * - Validate if a PID belongs to a caffeine server process
- * - Clean up stale PID files
  */
 
 const fs = require('fs');
@@ -15,7 +10,7 @@ const os = require('os');
 const { spawn } = require('child_process');
 const lockfile = require('proper-lockfile');
 
-const CONFIG_DIR = path.join(os.homedir(), '.claude', 'plugins', 'cc-caffeine');
+const CONFIG_DIR = path.join(os.homedir(), '.claude', 'plugins', 'cc-amphetamine');
 const PID_FILE = path.join(CONFIG_DIR, 'server.pid');
 
 const withPidLock = async (fn) => {
@@ -116,9 +111,9 @@ const removePidFile = async () => {
 };
 
 /**
- * Check if a process with given PID exists and is a caffeine server
+ * Check if a process with given PID exists and is an amphetamine server
  * @param {number} pid - Process ID to check
- * @returns {Promise<boolean>} True if process exists and is caffeine server
+ * @returns {Promise<boolean>} True if process exists and is amphetamine server
  */
 const validatePid = async pid => {
   return new Promise(resolve => {
@@ -134,7 +129,7 @@ const validatePid = async pid => {
       // Other errors (like EPERM) mean process exists but we can't signal it
     }
 
-    // Process exists, now check if it's a caffeine server
+    // Process exists, now check if it's an amphetamine server
     const isWindows = os.platform() === 'win32';
     const psCommand = isWindows
       ? spawn('wmic', ['process', 'where', `processid=${pid}`, 'get', 'commandline'], {
@@ -156,11 +151,10 @@ const validatePid = async pid => {
 
       const commandLine = output.trim().toLowerCase();
       for (const line of commandLine.split('\n')) {
-        // Check if command line contains both "caffeine" and "server"
-        const isCaffeineServer = line.includes('caffeine server') || line.includes('caffeine.js server');
+        const isAmphetamineServer = line.includes('amphetamine server') || line.includes('amphetamine.js server');
         const isElectron = line.includes('electron');
 
-        if (isCaffeineServer && isElectron) {
+        if (isAmphetamineServer && isElectron) {
           resolve(true);
           return;
         }
@@ -176,7 +170,7 @@ const validatePid = async pid => {
 };
 
 /**
- * Check if caffeine server is running using PID file
+ * Check if server is running using PID file
  * @returns {Promise<boolean>} True if server is running
  */
 const isServerRunningWithLock = async () => {
@@ -186,7 +180,7 @@ const isServerRunningWithLock = async () => {
 };
 
 /**
- * Check if caffeine server is running using PID file
+ * Check if server is running using PID file
  * @returns {Promise<boolean>} True if server is running
  */
 const isServerRunning = async () => {

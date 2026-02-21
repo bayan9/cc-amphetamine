@@ -6,7 +6,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-caffeine caffeinate"
+                        "command": "npx cc-amphetamine caffeinate"
                     }
                 ]
             }
@@ -17,7 +17,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-caffeine caffeinate"
+                        "command": "npx cc-amphetamine caffeinate"
                     }
                 ]
             }
@@ -28,7 +28,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-caffeine caffeinate"
+                        "command": "npx cc-amphetamine caffeinate"
                     }
                 ]
             }
@@ -38,7 +38,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-caffeine uncaffeinate"
+                        "command": "npx cc-amphetamine uncaffeinate"
                     }
                 ]
             }
@@ -48,7 +48,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-caffeine uncaffeinate"
+                        "command": "npx cc-amphetamine uncaffeinate"
                     }
                 ]
             }
@@ -58,7 +58,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-caffeine uncaffeinate"
+                        "command": "npx cc-amphetamine uncaffeinate"
                     }
                 ]
             }

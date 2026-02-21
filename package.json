@@ -1,18 +1,18 @@
 {
-  "name": "cc-caffeine",
-  "version": "0.2.0",
-  "description": "Prevents your computer from sleeping while Claude Code works hard",
-  "main": "caffeine.js",
+  "name": "cc-amphetamine",
+  "version": "0.1.0",
+  "description": "Shows a clawd icon in the menu bar while Claude Code is active, pairs with Amphetamine for sleep prevention",
+  "main": "amphetamine.js",
   "bin": {
-    "cc-caffeine": "./caffeine.js"
+    "cc-amphetamine": "./amphetamine.js"
   },
   "scripts": {
-    "start": "npm run server",
-    "caffeinate": "node caffeine.js caffeinate",
-    "uncaffeinate": "node caffeine.js uncaffeinate",
-    "status": "node caffeine.js status",
-    "version": "node caffeine.js version",
-    "server": "npx electron caffeine.js server",
+    "start": "pnpm run server",
+    "caffeinate": "node amphetamine.js caffeinate",
+    "uncaffeinate": "node amphetamine.js uncaffeinate",
+    "status": "node amphetamine.js status",
+    "version": "node amphetamine.js version",
+    "server": "npx electron amphetamine.js server",
     "lint": "eslint --fix *.js src/*.js || echo 'eslint not installed'",
     "format": "prettier --write *.js src/*.js || echo 'prettier not installed'"
   },
@@ -20,18 +20,14 @@
     "claude-code",
     "claude-code-plugin",
     "plugin",
-    "nap",
     "sleep",
     "sleep-prevention",
-    "caffeine",
-    "caffeinate",
+    "amphetamine",
     "system-tray",
     "electron"
   ],
   "author": {
-    "name": "Samuel Berthe",
-    "email": "hey@samuel-berthe.fr",
-    "url": "https://samuel-berthe.fr"
+    "name": "Rogerio Chaves"
   },
   "license": "MIT",
   "dependencies": {
@@ -47,11 +43,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/samber/cc-caffeine.git"
+    "url": "https://github.com/rogeriochaves/cc-amphetamine.git"
   },
   "os": [
-    "darwin",
-    "linux",
-    "win32"
+    "darwin"
   ]
 }

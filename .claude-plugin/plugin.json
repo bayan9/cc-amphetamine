@@ -1,23 +1,19 @@
 {
-    "name": "cc-caffeine",
-    "description": "Prevents your computer from sleeping while Claude Code works hard",
-    "version": "0.2.0",
+    "name": "cc-amphetamine",
+    "description": "Shows a clawd icon in the menu bar while Claude Code is active, pairs with Amphetamine for sleep prevention",
+    "version": "0.1.0",
     "author": {
-        "name": "Samuel Berthe",
-        "email": "hey@samuel-berthe.fr"
+        "name": "Rogerio Chaves"
     },
-    "homepage": "https://github.com/samber/cc-caffeine",
-    "repository": "https://github.com/samber/cc-caffeine",
+    "homepage": "https://github.com/rogeriochaves/cc-amphetamine",
+    "repository": "https://github.com/rogeriochaves/cc-amphetamine",
     "license": "MIT",
     "keywords": [
         "claude-code",
         "claude-code-plugin",
         "plugin",
-        "nap",
         "sleep",
         "sleep-prevention",
-        "caffeine",
-        "caffeinate",
-        "system-tray"
+        "amphetamine"
     ]
 }

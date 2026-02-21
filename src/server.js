@@ -16,7 +16,7 @@ const {
 } = require('./electron');
 const { isServerRunning, writePidFile, withPidLock, isServerRunningWithLock } = require('./pid');
 
-const CHECK_INTERVAL = 5 * 1000; // 10 seconds
+const CHECK_INTERVAL = 5 * 1000; // 5 seconds
 
 /**
  * Ensure server is running, start if needed
@@ -33,17 +33,17 @@ const runServerProcessIfNotStarted = async () => {
 };
 
 /**
- * Start server process using npm
+ * Start server process using pnpm
  */
 const startServerProcess = async () => {
-  console.error('Starting caffeine server...');
+  console.error('Starting amphetamine server...');
 
   const cwd = path.join(__dirname, '..');
 
-  const serverProcess = spawn('npm', ['run', 'server'], {
+  const serverProcess = spawn('pnpm', ['run', 'server'], {
     detached: true,
     stdio: 'ignore',
-    cwd // is needed to find the correct caffeine.js
+    cwd
   });
 
   serverProcess.unref();
@@ -66,7 +66,7 @@ const handleServer = async () => {
       // Inside the lock, check if server is already running
       const alreadyRunning = await isServerRunning();
       if (alreadyRunning) {
-        console.error('Caffeine server is already running');
+        console.error('Amphetamine server is already running');
         return;
       }
 
@@ -122,7 +122,7 @@ const startServer = async () => {
     await initSessionsFile();
     const state = getSystemTray();
     startPolling(state, CHECK_INTERVAL);
-    console.error('Caffeine server started successfully with system tray');
+    console.error('Amphetamine server started successfully with system tray');
 
     // Only setup signal handlers if server actually started
     if (state) {
@@ -153,11 +153,11 @@ const startServer = async () => {
 const spawnElectronProcess = () => {
   const cwd = path.join(__dirname, '..');
 
-  const electronProcess = spawn('npx', ['electron', 'caffeine.js', 'server'], {
+  const electronProcess = spawn('npx', ['electron', 'amphetamine.js', 'server'], {
     stdio: 'inherit',
     shell: true,
     detached: false,
-    cwd // is needed to find caffeine.js
+    cwd
   });
 
   electronProcess.on('exit', code => {

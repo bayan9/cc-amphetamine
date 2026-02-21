@@ -1,5 +1,8 @@
 /**
- * System Tray module - Handles all system tray functionality
+ * System Tray module - Handles system tray icon display
+ *
+ * Shows clawd icon when Claude Code sessions are active.
+ * Exits when no sessions remain (Amphetamine detects process exit).
  */
 
 const path = require('path');
@@ -12,13 +15,16 @@ const package = require('../package.json');
 let trayState = null;
 
 /**
- * Create icon for system tray
+ * Create clawd icon for system tray (monochrome template image)
  */
-const createIcon = isActive => {
-  const icon = isActive ? '../assets/icon-coffee-full.png' : '../assets/icon-coffee-empty.png';
-  const iconPath = path.join(__dirname, icon);
+const createIcon = () => {
+  const iconPath = path.join(__dirname, '../assets/clawd.png');
   const { nativeImage } = getElectron();
-  return nativeImage.createFromPath(iconPath);
+  const image = nativeImage.createFromPath(iconPath);
+  if (process.platform === 'darwin') {
+    image.setTemplateImage(true);
+  }
+  return image;
 };
 
 /**
@@ -32,14 +38,12 @@ const createSystemTray = () => {
   }
 
   try {
-    const tray = new Tray(createIcon(false));
-    tray.setToolTip('CC-Caffeine: Normal');
+    const tray = new Tray(createIcon());
+    tray.setToolTip('CC-Amphetamine: Active');
 
     trayState = {
       tray,
-      isCaffeinated: false,
-      pollInterval: null,
-      powerSaveBlockerId: null
+      pollInterval: null
     };
 
     if (!Menu) {
@@ -54,13 +58,7 @@ const createSystemTray = () => {
       {
         label: 'Github',
         click: () => {
-          getElectron().shell.openExternal('https://github.com/samber/cc-caffeine')
-        }
-      },
-      {
-        label: '💖 Sponsor',
-        click: () => {
-          getElectron().shell.openExternal('https://github.com/sponsors/samber')
+          getElectron().shell.openExternal('https://github.com/rogeriochaves/cc-amphetamine')
         }
       },
       {
@@ -101,47 +99,10 @@ const getSystemTray = () => {
 };
 
 /**
- * Update tray icon based on caffeine state
+ * Update status based on active sessions.
+ * Exits when no sessions remain — Amphetamine detects process exit.
  */
-const updateTrayIcon = state => {
-  if (!state || !state.tray) {
-    return;
-  }
-
-  const icon = createIcon(state.isCaffeinated);
-  state.tray.setImage(icon);
-  state.tray.setToolTip(`CC-Caffeine: ${state.isCaffeinated ? 'Caffeinated' : 'Normal'}`);
-};
-
-/**
- * Enable caffeine (prevent sleep)
- */
-const enableCaffeine = state => {
-  if (!state.isCaffeinated) {
-    const { powerSaveBlocker } = getElectron();
-    state.isCaffeinated = true;
-    state.powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
-  }
-};
-
-/**
- * Disable caffeine (allow sleep)
- */
-const disableCaffeine = state => {
-  if (state.isCaffeinated) {
-    const { powerSaveBlocker } = getElectron();
-    state.isCaffeinated = false;
-    if (state.powerSaveBlockerId !== null) {
-      powerSaveBlocker.stop(state.powerSaveBlockerId);
-      state.powerSaveBlockerId = null;
-    }
-  }
-};
-
-/**
- * Update caffeine status based on active sessions
- */
-const updateCaffeineStatus = async state => {
+const updateStatus = async state => {
   if (!state) {
     return;
   }
@@ -149,17 +110,14 @@ const updateCaffeineStatus = async state => {
   try {
     await cleanupExpiredSessionsWithLock();
     const activeSessions = await getActiveSessionsWithLock();
-    const shouldCaffeinate = activeSessions.length > 0;
 
-    if (shouldCaffeinate && !state.isCaffeinated) {
-      enableCaffeine(state);
-    } else if (!shouldCaffeinate && state.isCaffeinated) {
-      disableCaffeine(state);
+    if (activeSessions.length === 0) {
+      console.error('No active sessions, shutting down...');
+      await shutdownServer(state);
+      process.exit(0);
     }
-
-    updateTrayIcon(state);
   } catch (error) {
-    console.error('Error updating caffeine status:', error);
+    console.error('Error updating status:', error);
   }
 };
 
@@ -168,11 +126,11 @@ const updateCaffeineStatus = async state => {
  */
 const startPolling = (state, interval = 10000) => {
   // Initial check
-  updateCaffeineStatus(state);
+  updateStatus(state);
 
   // Set up periodic polling
   state.pollInterval = setInterval(() => {
-    updateCaffeineStatus(state);
+    updateStatus(state);
   }, interval);
 };
 
@@ -194,7 +152,7 @@ const stopPolling = state => {
  * Shutdown server and clean up resources
  */
 const shutdownServer = async state => {
-  console.error('Shutting down caffeine server...');
+  console.error('Shutting down amphetamine server...');
 
   if (!state) {
     console.error('No state provided, exiting...');
@@ -203,13 +161,6 @@ const shutdownServer = async state => {
 
   // Stop polling
   stopPolling(state);
-
-  // Always disable caffeine before shutting down
-  try {
-    disableCaffeine(state);
-  } catch (error) {
-    console.error('Error disabling caffeine:', error.message);
-  }
 
   // Clean up Electron system tray
   try {
@@ -237,10 +188,7 @@ module.exports = {
   createSystemTray,
   getSystemTray,
   getSystemTrayState,
-  updateTrayIcon,
-  enableCaffeine,
-  disableCaffeine,
-  updateCaffeineStatus,
+  updateStatus,
   startPolling,
   stopPolling,
   shutdownServer

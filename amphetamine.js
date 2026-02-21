@@ -5,7 +5,7 @@ const os = require('os');
 const fs = require('fs');
 
 /**
- * Main entry point for CC-Caffeine application
+ * Main entry point for CC-Amphetamine application
  *
  * This file contains the main() function and orchestrates all modules.
  * All functionality has been split into separate modules for better organization.
@@ -14,7 +14,7 @@ const fs = require('fs');
 const { handleCaffeinate, handleUncaffeinate, handleStatus, handleVersion,  handleUsage } = require('./src/commands');
 const { handleServer } = require('./src/server');
 
-const CONFIG_DIR = path.join(os.homedir(), '.claude', 'plugins', 'cc-caffeine');
+const CONFIG_DIR = path.join(os.homedir(), '.claude', 'plugins', 'cc-amphetamine');
 
 const ensureConfigDir = () => {
   try {

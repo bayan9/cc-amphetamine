@@ -10,6 +10,7 @@ const fs = require('fs');
 const { addSessionWithLock, removeSessionWithLock, getActiveSessionsWithLock } = require('./session');
 const { isServerRunningWithLock } = require('./pid');
 const { runServerProcessIfNotStarted } = require('./server');
+const { getConfig } = require('./config');
 
 /**
  * Handle session commands with JSON input from Claude Code hooks
@@ -43,7 +44,7 @@ const handleSessionCommand = async (action, sessionOperation) => {
     }
 
     console.error(
-      `${action === 'caffeinate' ? 'Enabled' : 'Disabled'} caffeine for session: ${sessionId}`
+      `${action === 'caffeinate' ? 'Enabled' : 'Disabled'} amphetamine for session: ${sessionId}`
     );
 
     // Log cleanup results if any
@@ -93,12 +94,12 @@ const handleVersion = () => {
       pluginVersion = 'not found';
     }
 
-    console.error('=== CC-Caffeine Version ===');
+    console.error('=== CC-Amphetamine Version ===');
     console.error(`Package version: ${packageVersion}`);
     console.error(`Plugin version:  ${pluginVersion}`);
 
     if (packageVersion !== pluginVersion && pluginVersion !== 'not found') {
-      console.error('⚠️  Warning: Package and plugin versions do not match!');
+      console.error('Warning: Package and plugin versions do not match!');
     }
   } catch (error) {
     console.error('Error getting version:', error.message);
@@ -114,8 +115,8 @@ const handleStatus = async () => {
     const serverRunning = await isServerRunningWithLock();
     const activeSessions = await getActiveSessionsWithLock();
 
-    console.error('=== CC-Caffeine Status ===');
-    console.error(`Server Status: ${serverRunning ? '✅ Running' : '❌ Stopped'}`);
+    console.error('=== CC-Amphetamine Status ===');
+    console.error(`Server Status: ${serverRunning ? 'Running' : 'Stopped'}`);
     console.error(`Active Sessions: ${activeSessions.length}`);
 
     if (activeSessions.length > 0) {
@@ -132,7 +133,7 @@ const handleStatus = async () => {
       });
     }
 
-    console.error('\nSession timeout: 15 minutes of inactivity');
+    console.error(`\nSession timeout: ${getConfig().session_timeout_minutes} minutes of inactivity`);
   } catch (error) {
     console.error('Error getting status:', error.message);
     process.exit(1);
@@ -143,14 +144,14 @@ const handleStatus = async () => {
  * Show usage help
  */
 const handleUsage = () => {
-  console.error('Usage: npx electron caffeine.js [caffeinate|uncaffeinate|server|status|version]');
+  console.error('Usage: cc-amphetamine [caffeinate|uncaffeinate|server|status|version]');
   console.error('');
   console.error('Commands:');
-  console.error('  caffeinate [session_id]   - Enable caffeine for current session');
-  console.error('  uncaffeinate [session_id] - Disable caffeine for current session');
-  console.error('  server                    - Start caffeine server with system tray');
+  console.error('  caffeinate [session_id]   - Enable amphetamine for current session');
+  console.error('  uncaffeinate [session_id] - Disable amphetamine for current session');
+  console.error('  server                    - Start amphetamine server with system tray');
   console.error('  status                    - Show current status and active sessions');
-  console.error('  version                   - Show version information from package.json and plugin.json');
+  console.error('  version                   - Show version information');
   process.exit(1);
 };
 

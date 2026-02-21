@@ -2,7 +2,7 @@
  * Electron module - Handles all Electron-specific functionality
  */
 
-let electron, Tray, Menu, powerSaveBlocker, nativeImage, app, shell;
+let electron, Tray, Menu, nativeImage, app, shell;
 let isElectron = false;
 
 /**
@@ -17,14 +17,13 @@ const loadElectron = () => {
     electron = require('electron');
     Tray = electron.Tray;
     Menu = electron.Menu;
-    powerSaveBlocker = electron.powerSaveBlocker;
     nativeImage = electron.nativeImage;
     app = electron.app;
     shell = electron.shell;
     isElectron = true;
   } catch (error) {
     console.error('Failed to load Electron:', error.message);
-    console.error('Make sure to use Electron: npx electron caffeine.js server');
+    console.error('Make sure to use Electron: npx electron amphetamine.js server');
     process.exit(1);
   }
 };
@@ -40,7 +39,6 @@ const getElectron = () => {
     electron,
     Tray,
     Menu,
-    powerSaveBlocker,
     nativeImage,
     app,
     shell
