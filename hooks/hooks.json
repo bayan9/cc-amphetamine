@@ -6,7 +6,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-amphetamine caffeinate"
+                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine caffeinate"
                     }
                 ]
             }
@@ -17,7 +17,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-amphetamine caffeinate"
+                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine caffeinate"
                     }
                 ]
             }
@@ -28,7 +28,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-amphetamine caffeinate"
+                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine caffeinate"
                     }
                 ]
             }
@@ -38,7 +38,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-amphetamine uncaffeinate"
+                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine uncaffeinate"
                     }
                 ]
             }
@@ -48,7 +48,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-amphetamine uncaffeinate"
+                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine uncaffeinate"
                     }
                 ]
             }
@@ -58,7 +58,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "npx cc-amphetamine uncaffeinate"
+                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine uncaffeinate"
                     }
                 ]
             }

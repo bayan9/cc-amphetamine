@@ -12,7 +12,7 @@
     "uncaffeinate": "node amphetamine.js uncaffeinate",
     "status": "node amphetamine.js status",
     "version": "node amphetamine.js version",
-    "server": "npx electron amphetamine.js server",
+    "server": "npx electron clawd.js server",
     "lint": "eslint --fix *.js src/*.js || echo 'eslint not installed'",
     "format": "prettier --write *.js src/*.js || echo 'prettier not installed'"
   },

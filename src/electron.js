@@ -58,6 +58,8 @@ const isRunningInElectron = () => {
 const preventWindowCreation = () => {
   const { app } = getElectron();
 
+  app.setName('clawd');
+
   if (app.dock && typeof app.dock.hide === 'function') {
     try {
       app.dock.hide();

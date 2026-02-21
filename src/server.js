@@ -153,7 +153,7 @@ const startServer = async () => {
 const spawnElectronProcess = () => {
   const cwd = path.join(__dirname, '..');
 
-  const electronProcess = spawn('npx', ['electron', 'amphetamine.js', 'server'], {
+  const electronProcess = spawn('npx', ['electron', 'clawd.js', 'server'], {
     stdio: 'inherit',
     shell: true,
     detached: false,

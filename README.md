@@ -19,7 +19,8 @@ The clawd icon auto-adapts to light/dark mode:
 ## Installation
 
 ```bash
-/install rogeriochaves/cc-amphetamine
+/plugin marketplace add rogeriochaves/cc
+/plugin install cc-amphetamine@rogeriochaves
 ```
 
 ## Amphetamine Setup
@@ -27,7 +28,7 @@ The clawd icon auto-adapts to light/dark mode:
 1. Install [Amphetamine](https://apps.apple.com/app/amphetamine/id937984704) from the Mac App Store
 2. Open Amphetamine > Preferences > Triggers
 3. Add a new trigger > **Application**
-4. Select the Electron app (find it at `node_modules/electron/dist/Electron.app` inside the plugin directory)
+4. Search for **"clawd"** and select it (or find the Electron app at `node_modules/electron/dist/Electron.app` inside the plugin directory)
 5. Done! Amphetamine will keep your Mac awake whenever the clawd icon is visible
 
 ## Configuration
