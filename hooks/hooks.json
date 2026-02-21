@@ -1,5 +1,5 @@
 {
-    "description": "Prevents your computer from sleeping while Claude Code works hard",
+    "description": "Shows clawd icon while Claude Code is active, pairs with Amphetamine for sleep prevention",
     "hooks": {
         "UserPromptSubmit": [
             {
@@ -29,26 +29,6 @@
                     {
                         "type": "command",
                         "command": "/Users/rchaves/Library/pnpm/cc-amphetamine caffeinate"
-                    }
-                ]
-            }
-        ],
-        "Notification": [
-            {
-                "hooks": [
-                    {
-                        "type": "command",
-                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine uncaffeinate"
-                    }
-                ]
-            }
-        ],
-        "Stop": [
-            {
-                "hooks": [
-                    {
-                        "type": "command",
-                        "command": "/Users/rchaves/Library/pnpm/cc-amphetamine uncaffeinate"
                     }
                 ]
             }

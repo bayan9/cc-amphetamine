@@ -2,7 +2,9 @@
  * Server module - Handles server process management and startup
  */
 
+const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { spawn } = require('child_process');
 
 const { initSessionsFile } = require('./session');
@@ -17,19 +19,45 @@ const {
 const { isServerRunning, writePidFile, withPidLock, isServerRunningWithLock } = require('./pid');
 
 const CHECK_INTERVAL = 5 * 1000; // 5 seconds
+const CONFIG_DIR = path.join(os.homedir(), '.claude', 'plugins', 'cc-amphetamine');
+const STARTUP_LOCK = path.join(CONFIG_DIR, '.starting');
 
 /**
  * Ensure server is running, start if needed
  */
 const runServerProcessIfNotStarted = async () => {
+  // Use a startup lock file to prevent concurrent spawns.
+  // The lock stays until the server boots and removes it (~3-5s).
+  // After 30s it's considered stale.
+  try {
+    const stat = fs.statSync(STARTUP_LOCK);
+    const age = Date.now() - stat.mtimeMs;
+    if (age < 30000) {
+      return; // startup in progress
+    }
+    fs.unlinkSync(STARTUP_LOCK);
+  } catch (error) {
+    // File doesn't exist, continue
+  }
+
   const isRunning = await isServerRunningWithLock();
   if (isRunning) {
-    console.error('Server is already running');
     return;
   }
 
-  console.error('Server not running, starting...');
-  await startServerProcess();
+  try {
+    // Atomic exclusive create — only one process wins
+    fs.writeFileSync(STARTUP_LOCK, process.pid.toString(), { flag: 'wx' });
+  } catch (error) {
+    return; // another process won the race
+  }
+
+  try {
+    console.error('Server not running, starting...');
+    await startServerProcess();
+  } catch (error) {
+    try { fs.unlinkSync(STARTUP_LOCK); } catch (e) {}
+  }
 };
 
 /**
@@ -47,9 +75,6 @@ const startServerProcess = async () => {
   });
 
   serverProcess.unref();
-
-  // Wait for server to start
-  await new Promise(resolve => setTimeout(resolve, 500));
 
   return true;
 };
@@ -119,6 +144,9 @@ const startServer = async () => {
 
   // Start the actual server
   try {
+    // Remove startup lock now that server is running
+    try { fs.unlinkSync(STARTUP_LOCK); } catch (e) {}
+
     await initSessionsFile();
     const state = getSystemTray();
     startPolling(state, CHECK_INTERVAL);

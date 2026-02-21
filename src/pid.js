@@ -151,10 +151,10 @@ const validatePid = async pid => {
 
       const commandLine = output.trim().toLowerCase();
       for (const line of commandLine.split('\n')) {
-        const isAmphetamineServer = line.includes('amphetamine server') || line.includes('amphetamine.js server');
+        const isServer = line.includes('clawd.js server') || line.includes('amphetamine.js server');
         const isElectron = line.includes('electron');
 
-        if (isAmphetamineServer && isElectron) {
+        if (isServer && isElectron) {
           resolve(true);
           return;
         }
